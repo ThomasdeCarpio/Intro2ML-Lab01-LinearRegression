@@ -11,6 +11,7 @@ const handleValidationErrors = (req, res, next) => {
 
 const predictionValidator = {
     validateFeatures: [
+        // Each feature is optional. If provided, it must be a valid number in the specified range.
         body('song_duration_ms').optional().isFloat({ min: 0 }).withMessage('song_duration_ms must be a non-negative number.'),
         body('acousticness').optional().isFloat({ min: 0, max: 1 }).withMessage('acousticness must be a number between 0 and 1.'),
         body('danceability').optional().isFloat({ min: 0, max: 1 }).withMessage('danceability must be a number between 0 and 1.'),
@@ -25,6 +26,7 @@ const predictionValidator = {
         body('time_signature').optional().isInt({ min: 1, max: 5 }).withMessage('time_signature must be a valid integer (e.g., 3, 4, 5).'),
         body('audio_valence').optional().isFloat({ min: 0, max: 1 }).withMessage('audio_valence must be a number between 0 and 1.'),
 
+        // This middleware runs after the checks and sends a formatted error response if any validation fails.
         handleValidationErrors,
     ],
 };

@@ -2,7 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 
+// --- Routers ---
 const predictionRouter = require('./api/routes/prediction.route');
+const statisticsRouter = require('./api/routes/statistics.route'); // <-- ADD THIS
 
 // --- Global Middlewares ---
 app.use(cors()); // Allow requests from other origins
@@ -14,8 +16,8 @@ app.get('/', (req, res) => {
 });
 
 // Main API routes
-// Use the plural '/predictions' for consistency with REST standards
 app.use('/api/predictions', predictionRouter);
+app.use('/api/statistics', statisticsRouter); // <-- ADD THIS
 
 // --- Error Handling ---
 // Catch-all for 404 Not Found errors

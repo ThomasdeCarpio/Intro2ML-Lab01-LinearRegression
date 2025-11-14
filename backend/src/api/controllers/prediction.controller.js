@@ -1,5 +1,5 @@
 const predictionService = require('../../services/prediction.service');
-const supabaseModel = require('../../models/supabase.model'); // For fetching visualization data
+// supabaseModel is no longer needed here, the service handles it.
 
 // Define default feature values. These represent an "average" or "neutral" song.
 const defaultFeatures = {
@@ -24,8 +24,8 @@ class PredictionController {
       // Merge the user's provided features over the default values.
       const features = { ...defaultFeatures, ...req.body };
 
-      // Call the service to get the prediction from the Python ML API
-      const predictedRating = await predictionService.getRatingPrediction(features);
+      // Call the service to get the prediction and log the result
+      const predictedRating = await predictionService.getRatingAndLog(features);
 
       // Send the successful response
       return res.status(200).json({
@@ -44,29 +44,8 @@ class PredictionController {
     }
   }
 
-  /**
-   * Fetches data for visualizations from the database.
-   */
-  async getVisualizationData(req, res) {
-    try {
-        // Call a method in the model to get all necessary data from Supabase
-        const songs = await supabaseModel.getAllSongsForViz();
-
-        return res.status(200).json({
-            success: true,
-            data: {
-                songs: songs,
-            }
-        });
-
-    } catch(error) {
-        console.error('Error fetching visualization data:', error.message);
-        return res.status(500).json({
-            success: false,
-            error: 'Failed to retrieve visualization data.'
-        });
-    }
-  }
+  // The getVisualizationData method is no longer needed here.
+  // It has been moved to the new statistics.controller.js
 }
 
 module.exports = new PredictionController();
