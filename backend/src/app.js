@@ -14,9 +14,11 @@ app.get('/', (req, res) => {
 });
 
 // Main API routes
-app.use('/api/predict', predictionRouter);
+// Use the plural '/predictions' for consistency with REST standards
+app.use('/api/predictions', predictionRouter);
 
-// --- Error Handling (optional but recommended) ---
+// --- Error Handling ---
+// Catch-all for 404 Not Found errors
 app.use((req, res, next) => {
   res.status(404).json({ success: false, error: 'Endpoint not found' });
 });
