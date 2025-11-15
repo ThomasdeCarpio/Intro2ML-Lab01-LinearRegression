@@ -1,102 +1,132 @@
-# 🎵 Song Rating Predictor - Backend
+# 🎵 Song Popularity Predictor
 
-This repository contains the backend service for the Song Rating Predictor project for our Machine Learning course. This service is built with Node.js and Express.js.
+This project is a web application built for the Machine Learning course (Lab 01). It uses a Linear Regression model to predict the popularity of a song based on its audio features.
 
-Its primary roles are:
-1.  To provide a REST API for the frontend application.
-2.  To communicate with the Python-based Machine Learning API to get predictions.
-3.  To query the Supabase database for song information, visualizations, and other data.
+The application is composed of three main parts:
+-   **Frontend:** A React application for user interaction and data visualization.
+-   **Backend:** A Node.js/Express API that serves the frontend and communicates with the ML model.
+-   **ML API:** A Python/Flask microservice that serves predictions from the trained model.
 
-## 🏛️ Architecture
+## Project Setup
 
-This project follows a microservice architecture to separate the web application logic from the machine learning model.
+To run this project, you will need to set up and run the Backend, Frontend, and ML API simultaneously.
 
-<<<<<<< Updated upstream
--   **Node.js/Express Backend (This Repo):** The main user-facing API. It handles all client requests, orchestrates calls to other services, and interacts with the database.
--   **Python/Flask ML API (Separate Repo):** A lightweight, internal-facing API whose sole purpose is to serve predictions from the trained Linear Regression model.
-=======
-```
-+----------------+      +---------------------+      +----------------------+
-|                |      |                     |      |                      |
-|  React         |----->|  Node.js / Express  |----->|  Python / Flask      |
-|  Frontend App  |      |  Backend API        |      |  ML Microservice     |
-|                |<-----|                     |<-----|                      |
-|                |      |                     |      |                      |
-+----------------+      +----------+----------+      +----------------------+
-                                   |
-                                   |
-                         +---------v---------+
-                         |                   |
-                         |  Supabase         |
-                         |  Database         |
-                         |                   |
-                         +-------------------+
-```
->>>>>>> Stashed changes
+### Prerequisites
 
-**Communication Flow:**
-`Frontend` ↔️ `Node.js API` ↔️ `Python ML API`
+-   [Node.js](https://nodejs.org/) (v18 or newer)
+-   [Python](https://www.python.org/) (v3.8 or newer)
+-   `pip` and `venv` for Python package management
 
-## 🛠️ Getting Started
+### Step 1: Clone the Repository
 
-Follow these steps to get the backend server running locally on your machine.
-
-### 1. Prerequisites
-
--   [Node.js](https://nodejs.org/) (v18 or newer recommended)
--   [npm](https://www.npmjs.com/) (usually comes with Node.js)
--   Access to the project's [Supabase](https://supabase.com/) instance.
-
-### 2. Clone the Repository
+Clone this project to your local machine.
 
 ```bash
 git clone <your-repository-url>
-cd song-rating-backend
+cd <project-folder-name>
 ```
 
-### 3. Install Dependencies
+### Step 2: Set Up the Backend (Node.js)
 
-Install all the necessary Node.js packages.
+The backend server handles requests from the frontend.
 
-```bash
-npm install
-```
-
-### 4. Set Up Environment Variables
-
-This project requires a `.env` file to store secret keys and configuration variables.
-
-1.  Create a copy of the example environment file:
+1.  **Navigate to the backend directory:**
     ```bash
-    cp .env.example .env
+    cd backend
     ```
-2.  Open the newly created `.env` file in your code editor.
-3.  Fill in the required values, especially your Supabase URL and key.
 
+2.  **Install dependencies:**
+    ```bash
+    npm install
     ```
-    # .env
-    
-    # Server Configuration
-    PORT=3000
-    
-    # Supabase Credentials
-    SUPABASE_URL=YOUR_SUPABASE_URL
-    SUPABASE_ANON_KEY=YOUR_SUPABASE_ANON_KEY
-    
-    # Machine Learning API URL
-    ML_API_URL=http://127.0.0.1:5000
+
+3.  **Set up environment variables:**
+    -   Copy the example file:
+        ```bash
+        cp .env.example .env
+        ```
+    -   *No changes are needed in the `.env` file for local development.*
+
+### Step 3: Set Up the Frontend (React)
+
+The frontend is the user interface for the application.
+
+1.  **Navigate to the frontend directory:**
+    ```bash
+    # From the project root
+    cd frontend
     ```
-    > **Note:** The `ML_API_URL` should point to the local address of the Python ML service, which typically runs on port `5000` by default.
 
-### 5. Run the Server
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
 
-Start the development server. It uses `nodemon` to automatically restart when you save changes to a file.
+### Step 4: Set Up the ML API (Python)
+
+The ML API serves the trained machine learning model.
+
+1.  **Navigate to the `ml-api` directory:**
+    ```bash
+    # From the project root
+    cd ml-api
+    ```
+
+2.  **Create and activate a Python virtual environment:**
+    ```bash
+    # Create the environment
+    python3 -m venv venv
+
+    # Activate it (on macOS/Linux)
+    source venv/bin/activate
+    
+    # On Windows, use:
+    .\venv\Scripts\activate
+    ```
+
+3.  **Install Python dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+## Running the Application
+
+To run the full application, you will need to open **three separate terminal tabs or windows** in the project's root directory.
+
+### Terminal 1: Start the ML API (Python)
 
 ```bash
+# Navigate to the ml-api folder
+cd ml-api
+
+# Activate the virtual environment (if not already active)
+source venv/bin/activate
+
+# Start the Flask server
+python app.py
+```
+> ✅ Your ML API should now be running on **http://localhost:5000**.
+
+With all three services running, you can now open `http://localhost:4000` in your browser to use the application.
+
+### Terminal 2: Start the Backend (Node.js)
+
+```bash
+# Navigate to the backend folder
+cd backend
+
+# Start the development server
 npm run dev
 ```
+> ✅ Your backend should now be running on **http://localhost:3000**.
 
-You should see a confirmation message in your terminal:
-`🚀 Server is running on http://localhost:3000`
+### Terminal 3: Start the Frontend (React)
 
-The backend is now running and ready to accept requests!
+```bash
+# Navigate to the frontend folder
+cd frontend
+
+# Start the development server
+npm run dev
+```
+> ✅ Your frontend should now be running and accessible at **http://localhost:4000**.
