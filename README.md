@@ -11,8 +11,28 @@ Its primary roles are:
 
 This project follows a microservice architecture to separate the web application logic from the machine learning model.
 
+<<<<<<< Updated upstream
 -   **Node.js/Express Backend (This Repo):** The main user-facing API. It handles all client requests, orchestrates calls to other services, and interacts with the database.
 -   **Python/Flask ML API (Separate Repo):** A lightweight, internal-facing API whose sole purpose is to serve predictions from the trained Linear Regression model.
+=======
+```
++----------------+      +---------------------+      +----------------------+
+|                |      |                     |      |                      |
+|  React         |----->|  Node.js / Express  |----->|  Python / Flask      |
+|  Frontend App  |      |  Backend API        |      |  ML Microservice     |
+|                |<-----|                     |<-----|                      |
+|                |      |                     |      |                      |
++----------------+      +----------+----------+      +----------------------+
+                                   |
+                                   |
+                         +---------v---------+
+                         |                   |
+                         |  Supabase         |
+                         |  Database         |
+                         |                   |
+                         +-------------------+
+```
+>>>>>>> Stashed changes
 
 **Communication Flow:**
 `Frontend` ↔️ `Node.js API` ↔️ `Python ML API`
