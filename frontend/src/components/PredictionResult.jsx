@@ -33,9 +33,10 @@ const PredictionResult = ({ prediction, modelStats }) => {
 
   // Determine color based on popularity score
   const getPopularityColor = (score) => {
-    if (score >= 70) return 'text-green-600';
-    if (score >= 40) return 'text-yellow-600';
-    return 'text-red-600';
+    if (score >= 80) return 'text-green-600';    // Hit Potential
+    if (score >= 60) return 'text-lime-600';     // High Popularity
+    if (score >= 30) return 'text-yellow-600';   // Moderate Appeal
+    return 'text-red-600';                      // Niche Appeal
   };
 
   // Determine background color for confidence badge
@@ -100,14 +101,19 @@ const PredictionResult = ({ prediction, modelStats }) => {
           </div>
         )}
 
-        <div className="bg-gray-50 rounded-lg p-4">
-          <div className="text-sm text-gray-600 mb-1">Popularity Category</div>
-          <div className="text-2xl font-semibold text-gray-800">
-            {prediction.popularity >= 70
-              ? 'Hit Potential'
-              : prediction.popularity >= 40
-              ? 'Moderate Appeal'
-              : 'Niche Appeal'}
+        <div className="grid grid-cols-1 gap-4 mb-6">
+          {/* The confidence section can be added back here later if needed */}
+
+          <div className="bg-gray-50 rounded-lg p-4">
+            <div className="text-sm text-gray-600 mb-1">Popularity Category</div>
+            <div className="text-2xl font-semibold text-gray-800">
+              {(() => {
+                if (prediction.popularity >= 80) return 'Hit Potential';
+                if (prediction.popularity >= 60) return 'High Popularity';
+                if (prediction.popularity >= 30) return 'Moderate Appeal';
+                return 'Niche Appeal';
+              })()}
+            </div>
           </div>
         </div>
       </div>
@@ -155,10 +161,10 @@ const PredictionResult = ({ prediction, modelStats }) => {
             <strong>0-30:</strong> Niche or underground appeal - may be experimental or genre-specific
           </li>
           <li>
-            <strong>30-60:</strong> Moderate popularity - solid fanbase potential
+            <strong>30-59:</strong> Moderate popularity - solid fanbase potential
           </li>
           <li>
-            <strong>60-80:</strong> High popularity - strong mainstream appeal
+            <strong>60-79:</strong> High popularity - strong mainstream appeal
           </li>
           <li>
             <strong>80-100:</strong> Hit potential - likely to chart and gain widespread attention
