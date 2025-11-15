@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import InputForm from '../components/InputForm';
 import PredictionResult from '../components/PredictionResult';
+import StaticCharts from '../components/StaticCharts';
+import ModelInsights from '../components/ModelInsights';
 // Removed DataVisualizations import
 import { predictSongPopularity, getModelStats } from '../api/predictionApi';
 
@@ -120,6 +122,9 @@ const Home = () => {
             </div>
           </div>
         </div>
+
+        <StaticCharts />
+        <ModelInsights />
       </main>
 
       {/* Footer */}
