@@ -1,69 +1,46 @@
 import React, { useState, useEffect } from 'react';
 import InputForm from '../components/InputForm';
 import PredictionResult from '../components/PredictionResult';
-import DataVisualizations from '../components/DataVisualizations';
-// The import path now points to your new, real API functions
-import { predictSongPopularity, getModelStats, getExampleTrends } from '../api/predictionApi';
+// Removed DataVisualizations import
+import { predictSongPopularity, getModelStats } from '../api/predictionApi';
 
-/**
- * Home Page Component
- * Main dashboard that combines all components
- */
 const Home = () => {
   const [prediction, setPrediction] = useState(null);
   const [modelStats, setModelStats] = useState(null);
-  const [trendData, setTrendData] = useState(null);
+  // Removed trendData state
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Load model stats and trend data on component mount
+  // Simplified to only load model stats
   useEffect(() => {
     const loadInitialData = async () => {
       try {
-        // These now make real API calls to your backend
-        const [statsResponse, trendsResponse] = await Promise.all([
-          getModelStats(),
-          getExampleTrends()
-        ]);
-
+        const statsResponse = await getModelStats();
         if (statsResponse.success) {
           setModelStats(statsResponse.stats);
-        } else {
-          // Handle cases where the API call is successful but the operation isn't
-          throw new Error(statsResponse.error || 'Failed to fetch model stats.');
-        }
-
-        if (trendsResponse.success) {
-          setTrendData(trendsResponse.trends);
-        } else {
-          throw new Error(trendsResponse.error || 'Failed to fetch trend data.');
         }
       } catch (err) {
         console.error('Error loading initial data:', err);
-        setError('Failed to load initial visualization data. The backend service may be offline.');
+        setError('Failed to load model data. Please refresh the page.');
       }
     };
-
     loadInitialData();
   }, []);
 
-  // Handle prediction submission by calling the real backend
   const handlePrediction = async (features) => {
     setIsLoading(true);
     setError(null);
-    setPrediction(null); // Clear previous prediction
+    setPrediction(null);
 
     try {
       const response = await predictSongPopularity(features);
-
       if (response.success) {
-        // Adapt the backend response to the format the PredictionResult component expects
+        // Simplified prediction object, no more confidence score
         const newPrediction = {
           popularity: response.data.predicted_rating,
         };
         setPrediction(newPrediction);
         
-        // Scroll to results after a short delay to allow rendering
         setTimeout(() => {
           const resultsElement = document.getElementById('prediction-results');
           if (resultsElement) {
@@ -72,17 +49,10 @@ const Home = () => {
         }, 100);
 
       } else {
-        // Handle structured validation errors from the backend validator
-        if (response.errors) {
-          const errorMessages = response.errors.map(e => e.msg).join(' ');
-          setError(errorMessages);
-        } else {
-          setError(response.error || 'An unknown prediction error occurred.');
-        }
+        setError(response.error || 'An unknown prediction error occurred.');
       }
     } catch (err) {
       console.error('Error making prediction:', err);
-      // This catches network errors or if the backend is down
       const errorMessage = err.response?.data?.error || 'An error occurred. Please check the connection to the backend.';
       setError(errorMessage);
     } finally {
@@ -107,44 +77,20 @@ const Home = () => {
         {/* Error Alert */}
         {error && (
           <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
-            <div className="flex items-start">
-              <svg
-                className="h-5 w-5 text-red-400 mt-0.5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-              <div className="ml-3">
-                <h3 className="text-sm font-medium text-red-800">Error</h3>
-                <p className="mt-1 text-sm text-red-700">{error}</p>
-              </div>
-            </div>
+            {/* ... error svg and text ... */}
           </div>
         )}
 
-        {/* Grid Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* SIMPLIFIED Grid Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Left Column - Input Form */}
-          <div className="lg:col-span-1">
+          <div>
             <InputForm onSubmit={handlePrediction} isLoading={isLoading} />
           </div>
 
-          {/* Right Column - Results and Visualizations */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Prediction Results */}
-            <div id="prediction-results">
-              <PredictionResult prediction={prediction} modelStats={modelStats} />
-            </div>
-
-            {/* Data Visualizations */}
-            <DataVisualizations trendData={trendData} />
+          {/* Right Column - Results */}
+          <div id="prediction-results">
+            <PredictionResult prediction={prediction} modelStats={modelStats} />
           </div>
         </div>
 
@@ -167,7 +113,6 @@ const Home = () => {
               <h3 className="font-semibold text-gray-800 mb-2">Key Features</h3>
               <ul className="list-disc list-inside space-y-1">
                 <li>Real-time popularity prediction</li>
-                <li>Confidence score for each prediction</li>
                 <li>Visual analysis of feature impacts</li>
                 <li>Feature importance rankings</li>
                 <li>Model performance metrics (R², RMSE, MAE)</li>
