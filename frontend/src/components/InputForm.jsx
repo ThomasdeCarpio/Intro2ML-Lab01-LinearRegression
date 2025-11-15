@@ -116,9 +116,9 @@ const InputForm = ({ onSubmit, isLoading }) => {
       label: 'Time Signature',
       type: 'number',
       min: 3,
-      max: 7,
+      max: 5,
       step: 1,
-      description: '3-7 beats per bar'
+      description: '3-5 beats per bar'
     },
     {
       name: 'audio_valence',
