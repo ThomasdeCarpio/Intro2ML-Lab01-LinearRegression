@@ -80,23 +80,25 @@ const PredictionResult = ({ prediction, modelStats }) => {
         </div>
       </div>
 
-      {/* Confidence Information */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-        <div className="bg-gray-50 rounded-lg p-4">
-          <div className="text-sm text-gray-600 mb-1">Confidence Level</div>
-          <div className="flex items-center justify-between">
-            <span className="text-2xl font-semibold text-gray-800">
-              {prediction.confidence}%
-            </span>
-            <span
-              className={`px-3 py-1 rounded-full text-sm font-medium border ${getConfidenceBadgeColor(
-                prediction.confidenceLevel
-              )}`}
-            >
-              {prediction.confidenceLevel}
-            </span>
+      {/* Conditionally render the confidence section */}
+      <div className={`grid grid-cols-1 ${prediction.confidence ? 'md:grid-cols-2' : ''} gap-4 mb-6`}>
+        {prediction.confidence && (
+          <div className="bg-gray-50 rounded-lg p-4">
+            <div className="text-sm text-gray-600 mb-1">Confidence Level</div>
+            <div className="flex items-center justify-between">
+              <span className="text-2xl font-semibold text-gray-800">
+                {prediction.confidence.toFixed(1)}%
+              </span>
+              <span
+                className={`px-3 py-1 rounded-full text-sm font-medium border ${getConfidenceBadgeColor(
+                  prediction.confidenceLevel
+                )}`}
+              >
+                {prediction.confidenceLevel}
+              </span>
+            </div>
           </div>
-        </div>
+        )}
 
         <div className="bg-gray-50 rounded-lg p-4">
           <div className="text-sm text-gray-600 mb-1">Popularity Category</div>

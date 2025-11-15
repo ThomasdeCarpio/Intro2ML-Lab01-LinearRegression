@@ -60,9 +60,6 @@ const Home = () => {
         // Adapt the backend response to the format the PredictionResult component expects
         const newPrediction = {
           popularity: response.data.predicted_rating,
-          // We can create a placeholder confidence score until the ML model provides one
-          confidence: 85.0 + Math.random() * 10, // Example: 85.0 to 95.0
-          confidenceLevel: 'High' 
         };
         setPrediction(newPrediction);
         
