@@ -37,7 +37,7 @@ const InputForm = ({ onSubmit, isLoading }) => {
     { name: 'audio_mode', label: 'Audio Mode', type: 'select', options: [{ value: 0, label: 'Minor (0)' }, { value: 1, label: 'Major (1)' }], description: 'Major or Minor modality' },
     { name: 'speechiness', label: 'Speechiness', type: 'slider', min: 0, max: 1, step: 0.01, description: '0 (no speech) - 1 (speech-like)' },
     { name: 'tempo', label: 'Tempo (BPM)', type: 'number', min: 0, max: 250, step: 1, description: '0-250 beats per minute' },
-    { name: 'time_signature', label: 'Time Signature', type: 'number', min: 3, max: 5, step: 1, description: '3-7 beats per bar' },
+    { name: 'time_signature', label: 'Time Signature', type: 'number', min: 3, max: 5, step: 1, description: '3-5 beats per bar' },
     { name: 'audio_valence', label: 'Valence', type: 'slider', min: 0, max: 1, step: 0.01, description: '0 (sad/negative) - 1 (happy/positive)' }
   ];
 
