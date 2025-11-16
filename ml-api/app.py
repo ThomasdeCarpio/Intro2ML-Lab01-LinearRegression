@@ -31,29 +31,24 @@ def predict():
         json_data = request.get_json()
         features_df = pd.DataFrame(json_data, index=[0])
 
-        # --- START OF FULL PREPROCESSING LOGIC ---
-        
-        # 1. Apply Log Transformations (THE MISSING STEP)
-        for col in ['song_duration_ms', 'liveness', 'acousticness']:
-            # Add a small constant to avoid log(0) if input is 0
-            features_df[col] = np.log(features_df[col] + 1e-9) 
+        # 1. Apply Log Transformations (NOTE: 'acousticness' is no longer transformed)
+        for col in ['song_duration_ms', 'liveness']:
+            features_df[col] = np.log(features_df[col] + 1e-9)
         
         features_df['speechiness'] = np.log1p(features_df['speechiness'])
 
-        # 2. Replicate 'is_instrumental' feature creation
+        # 2. Create 'is_instrumental' and drop original
         features_df['is_instrumental'] = (features_df['instrumentalness'] > 0.5).astype(int)
         features_df.drop('instrumentalness', axis=1, inplace=True)
 
-        # 3. Replicate One-Hot Encoding for 'key' and 'time_signature'
+        # 3. One-Hot Encode 'key' and 'time_signature'
         for i in range(1, 12):
             features_df[f'key_{i}'] = 1 if features_df['key'][0] == i else 0
         for i in [3, 4, 5]:
             features_df[f'time_signature_{i}'] = 1 if features_df['time_signature'][0] == i else 0
-
-        # 4. Drop the original categorical columns
         features_df.drop(['key', 'time_signature'], axis=1, inplace=True)
 
-        # 5. Ensure the final column order matches the model's training data
+        # 4. Ensure final column order (NO SCALING)
         final_feature_order = [
             'song_duration_ms', 'acousticness', 'danceability', 'energy', 
             'liveness', 'loudness', 'audio_mode', 'speechiness', 'tempo',
@@ -61,10 +56,7 @@ def predict():
             'key_4', 'key_5', 'key_6', 'key_7', 'key_8', 'key_9', 'key_10',
             'key_11', 'time_signature_3', 'time_signature_4', 'time_signature_5'
         ]
-        
         features_final = features_df.reindex(columns=final_feature_order, fill_value=0)
-
-        # --- END OF FULL PREPROCESSING LOGIC ---
 
         # The model pipeline will handle the scaling and polynomial features automatically
         prediction = model.predict(features_final)
@@ -86,62 +78,62 @@ def predict():
 def get_stats():
     # Replace these placeholder values with the actual stats from your model training
     stats = {
-        "r2": 0.04319520061687987,
-        "rmse": 19.976263480023103,
-        "mae": 15.713992263208237,
-        "mse": 399.05110262330476,
+        "r2": 0.03306582268754776,
+        "rmse": 20.081726158052792,
+        "mae": 15.792432029483637,
+        "mse": 403.2757254870218,
         "trainingSize": 10774,
         "testSize": 2237,
         "features": 13,
-        "lastTrained": "2025-11-15T17:35:46.384901Z",
+        "lastTrained": "2025-11-16T17:21:36.047088Z",
         "featureImportance": [
             {
                 "feature": "Loudness",
-                "importance": 0.339
-            },
-            {
-                "feature": "Audio",
-                "importance": 0.1638
+                "importance": 0.3509
             },
             {
                 "feature": "Energy",
-                "importance": 0.1135
-            },
-            {
-                "feature": "Danceability",
-                "importance": 0.097
-            },
-            {
-                "feature": "Acousticness",
-                "importance": 0.0821
+                "importance": 0.2284
             },
             {
                 "feature": "Is",
-                "importance": 0.0606
+                "importance": 0.1342
             },
             {
-                "feature": "Speechiness",
-                "importance": 0.0556
+                "feature": "Audio",
+                "importance": 0.1087
             },
             {
-                "feature": "Song",
-                "importance": 0.0519
+                "feature": "Acousticness",
+                "importance": 0.0949
+            },
+            {
+                "feature": "Danceability",
+                "importance": 0.0351
             },
             {
                 "feature": "Liveness",
-                "importance": 0.0249
+                "importance": 0.0163
+            },
+            {
+                "feature": "Speechiness",
+                "importance": 0.0122
             },
             {
                 "feature": "Tempo",
-                "importance": 0.0089
+                "importance": 0.0091
             },
             {
                 "feature": "Key",
-                "importance": 0.0024
+                "importance": 0.0064
             },
             {
                 "feature": "Time",
-                "importance": 0.0004
+                "importance": 0.0029
+            },
+            {
+                "feature": "Song",
+                "importance": 0.0008
             }
         ]
     }
