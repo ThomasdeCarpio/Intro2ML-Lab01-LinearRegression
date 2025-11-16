@@ -100,6 +100,11 @@ const Home = () => {
         <div className="mt-8 bg-white rounded-lg shadow-md p-6">
           <h2 className="text-2xl font-bold text-gray-800 mb-4">About This Tool</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-gray-700">
+            <div className="bg-yellow-50 border-l-4 border-yellow-400 text-yellow-800 p-4 rounded-r-lg mb-6" role="alert">
+                <p className="font-bold">Educational Project</p>
+                <p>This application is a non-commercial tool built to demonstrate and explain the features of a machine learning model for a university lab project.</p>
+            </div>
+
             <div>
               <h3 className="font-semibold text-gray-800 mb-2">How It Works</h3>
               <p className="mb-2">

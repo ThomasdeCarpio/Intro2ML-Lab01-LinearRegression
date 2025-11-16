@@ -26,19 +26,124 @@ const InputForm = ({ onSubmit, isLoading }) => {
 
   // Feature configurations for rendering the form fields
   const featureConfigs = [
-    { name: 'song_duration_ms', label: 'Song Duration (ms)', type: 'number', min: 0, max: 600000, step: 1000, description: '0 - 600,000 ms (0-10 minutes)' },
-    { name: 'acousticness', label: 'Acousticness', type: 'slider', min: 0, max: 1, step: 0.01, description: '0 (not acoustic) - 1 (very acoustic)' },
-    { name: 'danceability', label: 'Danceability', type: 'slider', min: 0, max: 1, step: 0.01, description: '0 (not danceable) - 1 (very danceable)' },
-    { name: 'energy', label: 'Energy', type: 'slider', min: 0, max: 1, step: 0.01, description: '0 (low energy) - 1 (high energy)' },
-    { name: 'instrumentalness', label: 'Instrumentalness', type: 'slider', min: 0, max: 1, step: 0.01, description: '0 (vocals) - 1 (instrumental)' },
-    { name: 'key', label: 'Key', type: 'number', min: 0, max: 11, step: 1, description: '0-11 (C, C#, D, ...)' },
-    { name: 'liveness', label: 'Liveness', type: 'slider', min: 0, max: 1, step: 0.01, description: '0 (studio) - 1 (live performance)' },
-    { name: 'loudness', label: 'Loudness (dB)', type: 'slider', min: -60, max: 0, step: 0.5, description: '-60 to 0 dB' },
-    { name: 'audio_mode', label: 'Audio Mode', type: 'select', options: [{ value: 0, label: 'Minor (0)' }, { value: 1, label: 'Major (1)' }], description: 'Major or Minor modality' },
-    { name: 'speechiness', label: 'Speechiness', type: 'slider', min: 0, max: 1, step: 0.01, description: '0 (no speech) - 1 (speech-like)' },
-    { name: 'tempo', label: 'Tempo (BPM)', type: 'number', min: 0, max: 250, step: 1, description: '0-250 beats per minute' },
-    { name: 'time_signature', label: 'Time Signature', type: 'number', min: 3, max: 5, step: 1, description: '3-5 beats per bar' },
-    { name: 'audio_valence', label: 'Valence', type: 'slider', min: 0, max: 1, step: 0.01, description: '0 (sad/negative) - 1 (happy/positive)' }
+    {
+      name: 'song_duration_ms',
+      label: 'Song Duration (ms)',
+      type: 'number',
+      min: 0,
+      max: 600000,
+      step: 1000,
+      description: 'The total length of the track in milliseconds (e.g., 180000ms = 3 minutes).'
+    },
+    {
+      name: 'acousticness',
+      label: 'Acousticness',
+      type: 'slider',
+      min: 0,
+      max: 1,
+      step: 0.01,
+      description: 'A measure of whether the track is acoustic. 1.0 represents high confidence the track is acoustic.'
+    },
+    {
+      name: 'danceability',
+      label: 'Danceability',
+      type: 'slider',
+      min: 0,
+      max: 1,
+      step: 0.01,
+      description: 'How suitable a track is for dancing based on tempo, rhythm stability, and beat strength.'
+    },
+    {
+      name: 'energy',
+      label: 'Energy',
+      type: 'slider',
+      min: 0,
+      max: 1,
+      step: 0.01,
+      description: 'Represents a perceptual measure of intensity and activity. High energy tracks feel fast, loud, and noisy.'
+    },
+    {
+      name: 'instrumentalness',
+      label: 'Instrumentalness',
+      type: 'slider',
+      min: 0,
+      max: 1,
+      step: 0.01,
+      description: 'Predicts whether a track contains no vocals. Values closer to 1.0 represent instrumental tracks.'
+    },
+    {
+      name: 'key',
+      label: 'Key',
+      type: 'number',
+      min: 0,
+      max: 11,
+      step: 1,
+      description: 'The main musical key of the track, mapped to standard Pitch Class notation (0=C, 1=C#, etc.).'
+    },
+    {
+      name: 'liveness',
+      label: 'Liveness',
+      type: 'slider',
+      min: 0,
+      max: 1,
+      step: 0.01,
+      description: 'Detects the presence of an audience in the recording. Higher values indicate a live performance.'
+    },
+    {
+      name: 'loudness',
+      label: 'Loudness (dB)',
+      type: 'slider',
+      min: -60,
+      max: 0,
+      step: 0.5,
+      description: 'The overall loudness of a track in decibels (dB), typically ranging from -60 to 0.'
+    },
+    {
+      name: 'audio_mode',
+      label: 'Audio Mode',
+      type: 'select',
+      options: [
+        { value: 1, label: 'Major (1)' },
+        { value: 0, label: 'Minor (0)' },
+      ],
+      description: 'Indicates the modality (Major or Minor) of a track, the type of scale from which its melodic content is derived.'
+    },
+    {
+      name: 'speechiness',
+      label: 'Speechiness',
+      type: 'slider',
+      min: 0,
+      max: 1,
+      step: 0.01,
+      description: 'Detects the presence of spoken words. High values indicate more speech-like content (e.g., a podcast).'
+    },
+    {
+      name: 'tempo',
+      label: 'Tempo (BPM)',
+      type: 'number',
+      min: 0,
+      max: 250,
+      step: 1,
+      description: 'The speed or pace of the track, measured in Beats Per Minute (BPM).'
+    },
+    {
+      name: 'time_signature',
+      label: 'Time Signature',
+      type: 'number',
+      min: 3,
+      max: 5,
+      step: 1,
+      description: 'The estimated number of beats in each bar or measure (e.g., 4 indicates a 4/4 time signature).'
+    },
+    {
+      name: 'audio_valence',
+      label: 'Valence',
+      type: 'slider',
+      min: 0,
+      max: 1,
+      step: 0.01,
+      description: 'Describes the musical positiveness. High valence sounds happy/cheerful, low valence sounds sad/angry.'
+    }
   ];
 
   // Handle input changes
